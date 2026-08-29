@@ -1,0 +1,7 @@
+{
+  "name": "Bal Vidya - Kids Learning (English, Math, Hindi & General Awareness)",
+  "description": "A colorful, interactive early learning platform for children aged 2–6 years teaching English, Math, Hindi, and General Awareness (Body Parts, Week Days, Months, Seasons, Planets, Continents) with phonics, games, rhymes, and stories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
