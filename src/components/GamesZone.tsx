@@ -55,6 +55,12 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
   const [selectedRangoliColor, setSelectedRangoliColor] = useState('#F59E0B');
   const [selectedStamp, setSelectedStamp] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      sound.stopSpeaking();
+    };
+  }, []);
+
   // Initialize Balloon Pop Game
   useEffect(() => {
     if (activeGame === 'balloon') {
@@ -260,29 +266,33 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
   return (
     <div className="space-y-6">
       {/* Sub-header Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/80 backdrop-blur-sm p-3 rounded-2xl border-2 border-amber-200 shadow-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🎈</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-3xl border-2 border-indigo-100 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center text-2xl">
+            🎮
+          </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
               Play & Learn Game Zone (बाल क्रीड़ा कुंज)
             </h2>
-            <p className="text-xs text-amber-800">Balloon popping, memory cards, rangoli art pad & sound guessing!</p>
+            <p className="text-xs text-slate-500 font-medium">
+              Interactive balloon popping, memory match cards, rangoli art pad & sound riddles!
+            </p>
           </div>
         </div>
 
         {/* Sub-tabs */}
-        <div className="flex flex-wrap gap-1.5 bg-amber-100/70 p-1 rounded-xl">
+        <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
           <button
             id="game-tab-balloon"
             onClick={() => {
               sound.playPop();
               setActiveGame('balloon');
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
               activeGame === 'balloon'
-                ? 'bg-fuchsia-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <span className="text-sm">🎈</span>
@@ -295,10 +305,10 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
               sound.playPop();
               setActiveGame('memory');
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
               activeGame === 'memory'
-                ? 'bg-fuchsia-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -311,10 +321,10 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
               sound.playPop();
               setActiveGame('rangoli');
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
               activeGame === 'rangoli'
-                ? 'bg-fuchsia-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Palette className="w-3.5 h-3.5" />
@@ -327,10 +337,10 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
               sound.playPop();
               setActiveGame('soundSafari');
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
               activeGame === 'soundSafari'
-                ? 'bg-fuchsia-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-700 hover:bg-slate-200'
             }`}
           >
             <Volume2 className="w-3.5 h-3.5" />
@@ -341,19 +351,19 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
 
       {/* Game 1: Balloon Pop */}
       {activeGame === 'balloon' && (
-        <div className="max-w-2xl mx-auto bg-gradient-to-b from-sky-100 via-amber-50 to-orange-50 rounded-3xl p-6 border-4 border-amber-300 shadow-xl text-center relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-extrabold bg-white/90 text-amber-950 px-3 py-1.5 rounded-full shadow-sm">
-              Tap floating balloons to pop!
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm text-center relative overflow-hidden">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-bold bg-indigo-50 text-indigo-900 px-3.5 py-1.5 rounded-full border border-indigo-100">
+              Tap floating balloons to pop! 🎈
             </span>
-            <div className="flex items-center gap-1 text-sm font-black text-fuchsia-600 bg-white/90 px-3 py-1.5 rounded-full shadow-sm">
+            <div className="flex items-center gap-1.5 text-xs font-black text-indigo-700 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <span>Popped: {balloonScore} 🎈</span>
+              <span>Popped: {balloonScore}</span>
             </div>
           </div>
 
           {/* Sky Balloon Stage */}
-          <div className="relative h-96 rounded-3xl border-2 border-sky-200 bg-gradient-to-b from-sky-200/50 to-amber-100/40 my-4 overflow-hidden shadow-inner">
+          <div className="relative h-96 rounded-2xl border border-sky-200 bg-gradient-to-b from-sky-100 via-sky-50 to-indigo-50/30 my-4 overflow-hidden shadow-inner">
             {/* Sun & Cloud Decor */}
             <div className="absolute top-4 left-6 text-4xl animate-pulse">☀️</div>
             <div className="absolute top-8 right-8 text-3xl opacity-80">☁️</div>
@@ -368,21 +378,21 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
                 }}
                 className={`absolute w-20 h-24 rounded-[50%_50%_50%_50%/60%_60%_40%_40%] bg-gradient-to-br ${
                   b.color
-                } shadow-lg flex flex-col items-center justify-center text-white border-2 border-white transition-all transform hover:scale-125 active:scale-75 ${
+                } shadow-md flex flex-col items-center justify-center text-white border-2 border-white transition-all transform hover:scale-125 active:scale-75 ${
                   b.popped ? 'scale-0 opacity-0' : 'animate-bounce'
                 }`}
               >
-                <span className="text-2xl font-extrabold drop-shadow font-['Fredoka',sans-serif]">
+                <span className="text-2xl font-black drop-shadow font-['Baloo_2',sans-serif]">
                   {b.char}
                 </span>
                 {/* Balloon knot and thread */}
-                <div className="w-2 h-2 bg-amber-800 rounded-full mt-2" />
+                <div className="w-2 h-2 bg-slate-700/40 rounded-full mt-1.5" />
                 <div className="w-0.5 h-6 bg-slate-400 opacity-60" />
               </button>
             ))}
           </div>
 
-          <p className="text-xs text-amber-800 font-bold">
+          <p className="text-xs text-slate-500 font-bold">
             💡 Pop 5 balloons to earn a golden star!
           </p>
         </div>
@@ -390,14 +400,14 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
 
       {/* Game 2: Memory Match */}
       {activeGame === 'memory' && (
-        <div className="max-w-xl mx-auto bg-gradient-to-br from-amber-50 via-pink-50 to-rose-50 rounded-3xl p-6 border-4 border-amber-300 shadow-xl text-center">
+        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm text-center">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold text-slate-800">
-              Matches Found: <span className="font-extrabold text-rose-600">{memoryMatches} / {MEMORY_CARDS.length}</span>
+            <span className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full">
+              Matches: <span className="font-extrabold text-indigo-600">{memoryMatches} / {MEMORY_CARDS.length}</span>
             </span>
             <button
               onClick={initMemoryGame}
-              className="flex items-center gap-1 text-xs font-bold text-amber-900 hover:text-rose-600 py-1.5 px-3 bg-amber-200/60 rounded-xl"
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 py-1.5 px-3 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Shuffle Cards</span>
@@ -412,16 +422,16 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
                 <button
                   key={idx}
                   onClick={() => handleCardClick(idx)}
-                  className={`h-24 sm:h-28 rounded-2xl border-4 transition-all duration-300 flex items-center justify-center shadow-md ${
+                  className={`h-24 sm:h-28 rounded-2xl border-2 transition-all duration-300 flex items-center justify-center shadow-xs ${
                     isRevealed
-                      ? 'bg-white border-rose-400 scale-100 rotate-0 shadow-lg'
-                      : 'bg-gradient-to-br from-amber-400 to-orange-500 border-amber-200 hover:scale-105 active:scale-95'
+                      ? 'bg-indigo-50/80 border-indigo-400 scale-100 rotate-0 shadow-sm'
+                      : 'bg-gradient-to-br from-indigo-500 to-indigo-700 border-indigo-400 hover:scale-105 active:scale-95 text-white'
                   }`}
                 >
                   {isRevealed ? (
                     <SmartIcon name={card.emoji} size={40} />
                   ) : (
-                    <SmartIcon name="🪷" size={28} className="opacity-75" />
+                    <span className="text-2xl text-white/80 font-black">✦</span>
                   )}
                 </button>
               );
@@ -429,8 +439,8 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           </div>
 
           {memoryMatches === MEMORY_CARDS.length && (
-            <div className="p-3 bg-emerald-500 text-white rounded-2xl font-black text-sm animate-bounce shadow-md">
-              🎉 Outstanding! You solved the Sacred Memory Match!
+            <div className="p-3 bg-emerald-500 text-white rounded-2xl font-black text-sm animate-bounce shadow-sm">
+              🎉 Outstanding! You solved the Memory Match!
             </div>
           )}
         </div>
@@ -438,17 +448,17 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
 
       {/* Game 3: Rangoli & Glitter Art Pad */}
       {activeGame === 'rangoli' && (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 border-4 border-amber-300 shadow-xl">
+        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+              <h3 className="text-xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                 Rangoli & Stamp Studio (रंगोली कला)
               </h3>
-              <p className="text-xs text-amber-800">Place sacred stamps and draw beautiful rangoli patterns!</p>
+              <p className="text-xs text-slate-500 font-medium">Place sacred stamps and draw beautiful rangoli patterns!</p>
             </div>
             <button
               onClick={clearRangoliCanvas}
-              className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-amber-100 text-amber-900 rounded-xl hover:bg-amber-200"
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Clear Art</span>
@@ -456,8 +466,8 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           </div>
 
           {/* Stamps Bar */}
-          <div className="flex flex-wrap items-center gap-2 mb-3 p-2 bg-amber-50 rounded-2xl border border-amber-200">
-            <span className="text-xs font-bold text-amber-900">Stamps:</span>
+          <div className="flex flex-wrap items-center gap-2 mb-3 p-2.5 bg-slate-50 rounded-2xl border border-slate-200">
+            <span className="text-xs font-bold text-slate-700">Stamps:</span>
             {['🪔', '🪷', '🦚', '🟡', '🌸', '🕉️', '🐘', '⭐'].map((stamp) => (
               <button
                 key={stamp}
@@ -467,8 +477,8 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
                 }}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
                   selectedStamp === stamp
-                    ? 'bg-amber-400 scale-110 shadow-md border border-white'
-                    : 'bg-white hover:bg-amber-100'
+                    ? 'bg-indigo-600 text-white scale-110 shadow-xs border border-white'
+                    : 'bg-white hover:bg-indigo-50 border border-slate-200'
                 }`}
               >
                 <SmartIcon name={stamp} size={20} />
@@ -477,7 +487,7 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           </div>
 
           {/* Art Canvas */}
-          <div className="relative rounded-2xl overflow-hidden border-4 border-dashed border-amber-300 bg-slate-900 shadow-inner">
+          <div className="relative rounded-2xl overflow-hidden border-2 border-dashed border-indigo-200 bg-slate-900 shadow-inner">
             <canvas
               ref={rangoliCanvasRef}
               width={500}
@@ -487,41 +497,41 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
             />
           </div>
 
-          <p className="text-xs text-slate-500 text-center mt-2">
-            ✨ Tap anywhere on the dark canvas to place your selected stamp and create glowing festive patterns!
+          <p className="text-xs text-slate-500 text-center mt-2.5">
+            ✨ Tap anywhere on the canvas to place your selected stamp and create colorful patterns!
           </p>
         </div>
       )}
 
       {/* Game 4: Sound Safari */}
       {activeGame === 'soundSafari' && (
-        <div className="max-w-xl mx-auto bg-gradient-to-br from-indigo-50 via-sky-50 to-amber-50 rounded-3xl p-6 border-4 border-indigo-200 shadow-xl text-center">
+        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm text-center">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold bg-indigo-50 text-indigo-900 px-3.5 py-1.5 rounded-full border border-indigo-100">
               Sound Riddle {safariIndex + 1} of {safariQuestions.length}
             </span>
-            <span className="text-xs font-extrabold text-indigo-700">Score: {safariScore} ⭐</span>
+            <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-full">Score: {safariScore} ⭐</span>
           </div>
 
           {(() => {
             const q = safariQuestions[safariIndex % safariQuestions.length];
             return (
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-800 mb-2">{q.prompt}</h3>
-                <p className="text-xs text-slate-600 mb-5">Tap the big speaker to hear the sacred sound, then guess!</p>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-1.5 font-['Baloo_2',sans-serif]">{q.prompt}</h3>
+                <p className="text-xs text-slate-500 mb-5 font-medium">Tap the speaker to hear the sound, then guess the right answer!</p>
 
                 {/* Big Audio Trigger Button */}
                 <button
                   id="play-safari-audio-btn"
                   onClick={() => handlePlaySafariSound(q.soundType)}
-                  className="w-28 h-28 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-sky-600 text-white flex flex-col items-center justify-center text-4xl shadow-xl hover:scale-110 active:scale-95 transition-all mb-6 border-4 border-white animate-pulse"
+                  className="w-24 h-24 mx-auto rounded-3xl bg-indigo-600 text-white flex flex-col items-center justify-center text-3xl shadow-sm hover:bg-indigo-700 active:scale-95 transition-all mb-6 border-2 border-indigo-400"
                 >
-                  <Volume2 className="w-10 h-10" />
+                  <Volume2 className="w-8 h-8" />
                   <span className="text-[10px] font-black tracking-wider uppercase mt-1">Play Sound</span>
                 </button>
 
                 {safariFeedback && (
-                  <div className="my-3 py-2 px-4 bg-indigo-200 text-indigo-950 font-black rounded-xl text-sm animate-bounce">
+                  <div className="my-3 py-2 px-4 bg-indigo-100 text-indigo-950 font-black rounded-xl text-sm animate-bounce">
                     {safariFeedback}
                   </div>
                 )}
@@ -532,7 +542,7 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
                     <button
                       key={opt.name}
                       onClick={() => handleSafariAnswer(opt)}
-                      className="p-4 bg-white rounded-2xl border-2 border-indigo-200 hover:border-indigo-500 hover:scale-105 active:scale-95 transition-all shadow-md flex flex-col items-center"
+                      className="p-4 bg-slate-50 hover:bg-indigo-50/50 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 hover:scale-105 active:scale-95 transition-all shadow-xs flex flex-col items-center"
                     >
                       <div className="mb-1">
                         <SmartIcon name={opt.emoji} size={36} />

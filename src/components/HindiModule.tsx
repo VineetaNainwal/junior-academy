@@ -122,29 +122,31 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
   return (
     <div className="space-y-6">
       {/* Sub-header Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/80 backdrop-blur-sm p-3 rounded-2xl border-2 border-amber-200 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-2xl border-2 border-rose-200 shadow-xs">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🕉️</span>
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
               Hindi Varnamala & Balgeet (हिंदी वर्णमाला व बालगीत)
             </h2>
-            <p className="text-xs text-amber-800">Learn Swar (स्वर), Vyanjan (व्यंजन), Devanagari tracing and joyful Hindi rhymes!</p>
+            <p className="text-xs text-rose-800">Learn Swar (स्वर), Vyanjan (व्यंजन), Devanagari tracing and joyful Hindi rhymes!</p>
           </div>
         </div>
 
         {/* Sub-tabs */}
-        <div className="flex flex-wrap gap-1.5 bg-amber-100/70 p-1 rounded-xl">
+        <div className="flex flex-wrap gap-1.5 bg-rose-100/70 p-1 rounded-xl">
           <button
             id="hindi-tab-swar"
             onClick={() => {
               sound.playPop();
+              handleStopBalgeet();
               setActiveSubTab('swar');
+              setSelectedLetter(HINDI_SWAR[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'swar'
                 ? 'bg-rose-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-rose-900 hover:bg-rose-200/60'
             }`}
           >
             <Grid className="w-3.5 h-3.5" />
@@ -155,12 +157,14 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
             id="hindi-tab-vyanjan"
             onClick={() => {
               sound.playPop();
+              handleStopBalgeet();
               setActiveSubTab('vyanjan');
+              setSelectedLetter(HINDI_VYANJAN[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'vyanjan'
                 ? 'bg-rose-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-rose-900 hover:bg-rose-200/60'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -171,12 +175,14 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
             id="hindi-tab-tracing"
             onClick={() => {
               sound.playPop();
+              handleStopBalgeet();
               setActiveSubTab('tracing');
+              setSelectedLetter(HINDI_SWAR[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'tracing'
                 ? 'bg-rose-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-rose-900 hover:bg-rose-200/60'
             }`}
           >
             <PenTool className="w-3.5 h-3.5" />
@@ -187,12 +193,14 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
             id="hindi-tab-balgeet"
             onClick={() => {
               sound.playPop();
+              handleStopBalgeet();
               setActiveSubTab('balgeet');
+              setActiveBalgeet(HINDI_BALGEET[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'balgeet'
                 ? 'bg-rose-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-rose-900 hover:bg-rose-200/60'
             }`}
           >
             <Music className="w-3.5 h-3.5" />
@@ -206,14 +214,14 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Selected Big Card */}
           <div className="lg:col-span-5 flex flex-col">
-            <div className="bg-gradient-to-br from-rose-50 via-amber-50 to-pink-50 rounded-3xl p-6 border-4 border-rose-300 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
+            <div className="bg-gradient-to-br from-rose-50 via-white to-pink-50 rounded-3xl p-6 border-2 border-rose-200 shadow-md flex flex-col items-center text-center relative overflow-hidden">
               <button
                 onClick={() => handleLetterClick(selectedLetter)}
-                className="w-36 h-36 rounded-3xl bg-gradient-to-br from-rose-400 to-pink-600 p-1 shadow-lg mb-3 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer group"
+                className="w-36 h-36 rounded-3xl bg-gradient-to-br from-rose-400 to-pink-500 p-1 shadow-md mb-3 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer group"
                 title="Tap to speak"
               >
                 <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center group-hover:bg-rose-50 transition-colors">
-                  <span className="text-7xl font-extrabold font-['Baloo_2',sans-serif] bg-gradient-to-r from-rose-600 to-amber-600 bg-clip-text text-transparent">
+                  <span className="text-7xl font-extrabold font-['Baloo_2',sans-serif] text-rose-600">
                     {selectedLetter.char}
                   </span>
                 </div>
@@ -243,7 +251,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                   const phoneticFallback = `${selectedLetter.roman.toUpperCase()} say ${selectedLetter.wordEnglish.split('(')[0]}`;
                   sound.speakHindi(selectedLetter.exampleSentence, phoneticFallback);
                 }}
-                className="bg-white/90 hover:bg-rose-50 rounded-2xl p-3 border border-rose-200 text-rose-950 text-sm font-semibold mb-5 shadow-sm max-w-sm cursor-pointer transition-colors text-left"
+                className="bg-white hover:bg-rose-50 rounded-2xl p-3 border border-rose-100 text-slate-800 text-sm font-semibold mb-5 shadow-xs max-w-sm cursor-pointer transition-colors text-left"
                 title="Tap to listen to example sentence"
               >
                 "{selectedLetter.exampleSentence}"
@@ -254,7 +262,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 <button
                   id="speak-hindi-letter-btn"
                   onClick={() => handleLetterClick(selectedLetter)}
-                  className="flex-1 py-3 px-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="flex-1 py-3 px-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Volume2 className="w-5 h-5" />
                   <span>सुनो (Listen)</span>
@@ -263,7 +271,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 <button
                   id="trace-hindi-letter-btn"
                   onClick={() => setActiveSubTab('tracing')}
-                  className="py-3 px-4 bg-rose-200 hover:bg-rose-300 text-rose-950 rounded-2xl font-bold transition-all flex items-center justify-center gap-1.5"
+                  className="py-3 px-4 bg-rose-100 hover:bg-rose-200 text-rose-950 rounded-2xl font-bold transition-all flex items-center justify-center gap-1.5"
                   title="Trace this Hindi letter"
                 >
                   <PenTool className="w-4 h-4" />
@@ -275,7 +283,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
 
           {/* Letter Grid */}
           <div className="lg:col-span-7">
-            <div className="bg-white/90 backdrop-blur-md rounded-3xl p-5 border-4 border-rose-200 shadow-md">
+            <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-base font-extrabold text-slate-800 flex items-center gap-2">
                   <span>{activeSubTab === 'swar' ? 'स्वर (Swar - Vowels):' : 'व्यंजन (Vyanjan - Consonants):'}</span>
@@ -295,15 +303,15 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                       onClick={() => handleLetterClick(item)}
                       className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all group ${
                         isSelected
-                          ? 'bg-gradient-to-b from-rose-500 to-pink-600 text-white border-white shadow-lg scale-105 ring-2 ring-rose-300'
-                          : 'bg-rose-50/60 hover:bg-rose-100 text-slate-900 border-rose-200 hover:scale-105 shadow-sm'
+                          ? 'bg-rose-500 text-white border-rose-400 shadow-md scale-105 ring-2 ring-rose-200'
+                          : 'bg-white hover:bg-rose-50 text-slate-900 border-slate-200 hover:border-rose-300 hover:scale-105 shadow-xs'
                       }`}
                     >
                       <span className="text-3xl font-extrabold font-['Baloo_2',sans-serif] leading-none mb-0.5">
                         {item.char}
                       </span>
                       <SmartIcon name={item.iconEmoji} size={22} className="my-0.5" />
-                      <span className={`text-[11px] font-bold truncate max-w-full mt-0.5 ${isSelected ? 'text-white' : 'text-rose-900'}`}>
+                      <span className={`text-[11px] font-bold truncate max-w-full mt-0.5 ${isSelected ? 'text-white' : 'text-slate-600'}`}>
                         {item.word}
                       </span>
                     </button>
@@ -325,8 +333,8 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 onClick={() => handleLetterClick(item)}
                 className={`w-11 h-11 rounded-xl font-extrabold text-lg flex-shrink-0 transition-all font-['Baloo_2',sans-serif] cursor-pointer ${
                   selectedLetter.char === item.char
-                    ? 'bg-rose-500 text-white shadow-md scale-110 ring-2 ring-rose-300'
-                    : 'bg-rose-100 text-rose-900 hover:bg-rose-200'
+                    ? 'bg-rose-500 text-white shadow-md scale-110 ring-2 ring-rose-200'
+                    : 'bg-slate-100 text-slate-800 hover:bg-rose-100'
                 }`}
                 title={`${item.char} से ${item.word}`}
               >
@@ -346,11 +354,11 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
 
       {/* Mode 4: Balgeet Player */}
       {activeSubTab === 'balgeet' && (
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-pink-50 via-amber-50 to-rose-50 rounded-3xl p-6 sm:p-8 border-4 border-rose-300 shadow-xl">
+        <div className="max-w-2xl mx-auto bg-gradient-to-br from-rose-50 via-white to-pink-50 rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-lg">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-3xl">🎶</span>
             <div>
-              <h3 className="text-xl font-extrabold text-slate-800 font-['Baloo_2',sans-serif]">
+              <h3 className="text-xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                 Hindi Balgeet Sing-Along (बालगीत)
               </h3>
               <p className="text-xs text-rose-800">Sing, listen, and follow along with cheerful musical rhymes!</p>
@@ -370,7 +378,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeBalgeet.id === rhyme.id
                     ? 'bg-rose-500 text-white shadow-md scale-105'
-                    : 'bg-white text-rose-950 border border-rose-200 hover:bg-rose-100'
+                    : 'bg-white text-slate-800 border border-slate-200 hover:bg-rose-50'
                 }`}
               >
                 <SmartIcon name={rhyme.iconEmoji} size={18} />
@@ -380,11 +388,11 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
           </div>
 
           {/* Player Container */}
-          <div className="bg-white/95 rounded-3xl p-6 border-2 border-rose-200 shadow-md text-center">
+          <div className="bg-white rounded-3xl p-6 border-2 border-rose-100 shadow-xs text-center">
             <div className="mb-2 flex items-center justify-center">
               <SmartIcon name={activeBalgeet.iconEmoji} size={48} />
             </div>
-            <h4 className="text-2xl font-extrabold text-rose-950 mb-4 font-['Baloo_2',sans-serif]">
+            <h4 className="text-2xl font-extrabold text-slate-900 mb-4 font-['Baloo_2',sans-serif]">
               {activeBalgeet.title}
             </h4>
 
@@ -396,8 +404,8 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                   onClick={() => handlePlaySingleBalgeetLine(activeBalgeet, idx)}
                   className={`p-2.5 rounded-xl text-base sm:text-lg font-bold transition-all cursor-pointer flex items-center justify-between group ${
                     highlightedLineIdx === idx
-                      ? 'bg-rose-500 text-white scale-105 shadow-md pl-4 border-l-4 border-amber-300'
-                      : 'text-slate-800 bg-amber-50/50 hover:bg-rose-100/70'
+                      ? 'bg-rose-500 text-white scale-105 shadow-md pl-4 border-l-4 border-rose-300'
+                      : 'text-slate-800 bg-slate-50 hover:bg-rose-50'
                   }`}
                   title="Tap to hear this line in Hindi"
                 >
@@ -413,7 +421,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 <button
                   id="play-balgeet-btn"
                   onClick={() => handlePlayBalgeet(activeBalgeet)}
-                  className="py-3 px-8 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-extrabold text-base rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                  className="py-3 px-8 bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-base rounded-2xl shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                 >
                   <Play className="w-5 h-5 fill-current" />
                   <span>Play & Sing Along!</span>
@@ -422,7 +430,7 @@ export const HindiModule: React.FC<HindiModuleProps> = ({ ageGroup, onAwardStar 
                 <button
                   id="stop-balgeet-btn"
                   onClick={handleStopBalgeet}
-                  className="py-3 px-8 bg-slate-700 text-white font-extrabold text-base rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                  className="py-3 px-8 bg-slate-700 text-white font-extrabold text-base rounded-2xl shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                 >
                   <RotateCcw className="w-5 h-5" />
                   <span>Stop Song</span>

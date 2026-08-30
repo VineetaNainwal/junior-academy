@@ -122,7 +122,9 @@ export const ShlokaRhymes: React.FC<ShlokaRhymesProps> = ({ ageGroup, onAwardSta
             id="shloka-tab-sanskrit"
             onClick={() => {
               sound.playPop();
+              handleStop();
               setActiveTab('shlokas');
+              setSelectedShloka(SHLOKAS_DATA[0]);
             }}
             className={`px-4 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeTab === 'shlokas'
@@ -138,7 +140,9 @@ export const ShlokaRhymes: React.FC<ShlokaRhymesProps> = ({ ageGroup, onAwardSta
             id="shloka-tab-rhymes"
             onClick={() => {
               sound.playPop();
+              handleStop();
               setActiveTab('rhymes');
+              setSelectedRhyme(ENGLISH_RHYMES[0]);
             }}
             className={`px-4 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeTab === 'rhymes'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgeGroup, EnglishLetter } from '../types';
 import { ENGLISH_ALPHABETS, SIGHT_WORDS, TODDLER_COLORS } from '../data/englishData';
 import { sound } from '../utils/sound';
@@ -30,8 +30,14 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
   const [quizScore, setQuizScore] = useState(0);
   const [quizFeedback, setQuizFeedback] = useState<string | null>(null);
 
-  // Filter letters for toddlers if age 2-3 (Focus on first 10 or common letters)
-  const letters = ageGroup === '2-3' ? ENGLISH_ALPHABETS.slice(0, 12) : ENGLISH_ALPHABETS;
+  useEffect(() => {
+    return () => {
+      sound.stopSpeaking();
+    };
+  }, []);
+
+  // All 26 alphabet letters A–Z for all ages
+  const letters = ENGLISH_ALPHABETS;
 
   const handleLetterClick = (item: EnglishLetter) => {
     setSelectedLetter(item);
@@ -86,29 +92,30 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
   return (
     <div className="space-y-6">
       {/* Sub-navigation Pills */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/80 backdrop-blur-sm p-3 rounded-2xl border-2 border-amber-200 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-2xl border-2 border-sky-200 shadow-xs">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🔤</span>
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
               English Phonics & Alphabet Garden
             </h2>
-            <p className="text-xs text-amber-800">Learn letters, phonics sounds, writing and colorful words!</p>
+            <p className="text-xs text-sky-800">Learn letters, phonics sounds, writing and colorful words!</p>
           </div>
         </div>
 
         {/* Sub-tabs */}
-        <div className="flex flex-wrap gap-1.5 bg-amber-100/70 p-1 rounded-xl">
+        <div className="flex flex-wrap gap-1.5 bg-sky-100/70 p-1 rounded-xl">
           <button
             id="eng-tab-flashcards"
             onClick={() => {
               sound.playPop();
               setActiveSubTab('flashcards');
+              setSelectedLetter(letters[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'flashcards'
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-sky-500 text-white shadow-md'
+                : 'text-sky-900 hover:bg-sky-200/60'
             }`}
           >
             <Grid className="w-3.5 h-3.5" />
@@ -120,11 +127,12 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
             onClick={() => {
               sound.playPop();
               setActiveSubTab('tracing');
+              setSelectedLetter(letters[0]);
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'tracing'
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-sky-500 text-white shadow-md'
+                : 'text-sky-900 hover:bg-sky-200/60'
             }`}
           >
             <PenTool className="w-3.5 h-3.5" />
@@ -139,8 +147,8 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'sightwords'
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-sky-500 text-white shadow-md'
+                : 'text-sky-900 hover:bg-sky-200/60'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -155,8 +163,8 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'colors'
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-sky-500 text-white shadow-md'
+                : 'text-sky-900 hover:bg-sky-200/60'
             }`}
           >
             <Palette className="w-3.5 h-3.5" />
@@ -171,8 +179,8 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'quiz'
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                ? 'bg-sky-500 text-white shadow-md'
+                : 'text-sky-900 hover:bg-sky-200/60'
             }`}
           >
             <Star className="w-3.5 h-3.5" />
@@ -186,25 +194,20 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Selected Big Card */}
           <div className="lg:col-span-5 flex flex-col">
-            <div className="bg-gradient-to-br from-amber-100 via-orange-50 to-amber-100 rounded-3xl p-6 border-4 border-amber-300 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
-              {/* Background decorative flower */}
-              <div className="absolute -top-10 -right-10 opacity-10 pointer-events-none">
-                <SmartIcon name="🪷" size={140} />
-              </div>
-
+            <div className="bg-gradient-to-br from-sky-50 via-white to-blue-50 rounded-3xl p-6 border-2 border-sky-200 shadow-md flex flex-col items-center text-center relative overflow-hidden">
               {/* Letter Display */}
               <button
                 onClick={() => {
                   sound.playBell();
                   sound.speak(`${selectedLetter.letter} for ${selectedLetter.word}`);
                 }}
-                className="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 p-1 shadow-lg mb-4 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all group"
+                className="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-br from-sky-400 to-blue-500 p-1 shadow-md mb-4 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all group"
                 title={`Click to hear ${selectedLetter.letter} for ${selectedLetter.word}`}
               >
-                <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center group-hover:bg-amber-50/50">
-                  <span className="text-6xl sm:text-7xl font-extrabold font-['Fredoka',sans-serif] bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center group-hover:bg-sky-50/50">
+                  <span className="text-6xl sm:text-7xl font-extrabold font-['Fredoka',sans-serif] bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                     {selectedLetter.letter}
-                    <span className="text-4xl sm:text-5xl text-amber-400 ml-1">{selectedLetter.lowercase}</span>
+                    <span className="text-4xl sm:text-5xl text-sky-400 ml-1">{selectedLetter.lowercase}</span>
                   </span>
                 </div>
               </button>
@@ -221,19 +224,19 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                 <div className="mb-2 animate-bounce flex items-center justify-center">
                   <SmartIcon name={selectedLetter.iconName} size={56} />
                 </div>
-                <h3 className="text-3xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+                <h3 className="text-3xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                   {selectedLetter.word}
                 </h3>
               </button>
-              <p className="text-sm font-bold text-orange-700 mb-2">
-                Phonic: <span className="underline decoration-wavy decoration-orange-400 font-mono text-base">{selectedLetter.phonic}</span>
+              <p className="text-sm font-bold text-sky-700 mb-2">
+                Phonic: <span className="underline decoration-wavy decoration-sky-400 font-mono text-base">{selectedLetter.phonic}</span>
               </p>
-              <p className="text-xs bg-amber-200/80 text-amber-900 px-3 py-1 rounded-full font-bold mb-4">
+              <p className="text-xs bg-sky-100 text-sky-900 px-3 py-1 rounded-full font-bold mb-4">
                 {selectedLetter.hindiMeaning}
               </p>
 
               {/* Sentence */}
-              <div className="bg-white/90 rounded-2xl p-3 border border-amber-200 text-amber-900 text-sm font-medium mb-5 shadow-sm max-w-sm">
+              <div className="bg-white rounded-2xl p-3 border border-sky-100 text-slate-700 text-sm font-medium mb-5 shadow-xs max-w-sm">
                 "{selectedLetter.exampleSentence}"
               </div>
 
@@ -245,7 +248,7 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                     sound.playBell();
                     sound.speak(`${selectedLetter.letter} for ${selectedLetter.word}`);
                   }}
-                  className="flex-1 py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
                   <Volume2 className="w-5 h-5" />
                   <span>Listen Sound</span>
@@ -254,7 +257,7 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                 <button
                   id="trace-selected-letter-btn"
                   onClick={() => setActiveSubTab('tracing')}
-                  className="py-3 px-4 bg-amber-200 hover:bg-amber-300 text-amber-950 rounded-2xl font-bold transition-all flex items-center justify-center gap-1.5"
+                  className="py-3 px-4 bg-sky-100 hover:bg-sky-200 text-sky-900 rounded-2xl font-bold transition-all flex items-center justify-center gap-1.5"
                   title="Trace this letter"
                 >
                   <PenTool className="w-4 h-4" />
@@ -266,13 +269,13 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
 
           {/* Letter Cards Grid */}
           <div className="lg:col-span-7">
-            <div className="bg-white/90 backdrop-blur-md rounded-3xl p-5 border-4 border-amber-200 shadow-md">
+            <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-xs">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-base font-extrabold text-amber-900 flex items-center gap-2">
+                <h4 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                   <span>Tap Any Letter:</span>
-                  <span className="text-xs font-normal text-amber-700">(Hear sounds & colorful words)</span>
+                  <span className="text-xs font-normal text-slate-600">(Hear sounds & words)</span>
                 </h4>
-                <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md">
+                <span className="text-xs font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-md">
                   {letters.length} Letters
                 </span>
               </div>
@@ -287,15 +290,15 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                       onClick={() => handleLetterClick(item)}
                       className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all group ${
                         isSelected
-                          ? 'bg-gradient-to-b from-amber-400 to-orange-500 text-white border-white shadow-lg scale-105 ring-2 ring-amber-300'
-                          : 'bg-amber-50/60 hover:bg-amber-100 text-amber-950 border-amber-200 hover:scale-105 shadow-sm'
+                          ? 'bg-sky-500 text-white border-sky-400 shadow-md scale-105 ring-2 ring-sky-200'
+                          : 'bg-white hover:bg-sky-50/70 text-slate-800 border-slate-200 hover:border-sky-300 hover:scale-105 shadow-xs'
                       }`}
                     >
                       <span className="text-2xl sm:text-3xl font-extrabold font-['Fredoka',sans-serif] leading-none mb-0.5">
                         {item.letter}
                       </span>
                       <SmartIcon name={item.iconName} size={22} className="my-0.5" />
-                      <span className={`text-[10px] font-bold truncate max-w-full mt-0.5 ${isSelected ? 'text-white' : 'text-amber-800'}`}>
+                      <span className={`text-[10px] font-bold truncate max-w-full mt-0.5 ${isSelected ? 'text-white' : 'text-slate-600'}`}>
                         {item.word}
                       </span>
                     </button>
@@ -321,8 +324,8 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                 }}
                 className={`w-10 h-10 rounded-xl font-black text-base flex-shrink-0 transition-all ${
                   selectedLetter.letter === item.letter
-                    ? 'bg-orange-500 text-white shadow-md scale-110'
-                    : 'bg-amber-100 text-amber-900 hover:bg-amber-200'
+                    ? 'bg-sky-500 text-white shadow-md scale-110'
+                    : 'bg-slate-100 text-slate-800 hover:bg-sky-100'
                 }`}
               >
                 {item.letter}
@@ -340,14 +343,14 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
 
       {/* Mode 3: Sight Words */}
       {activeSubTab === 'sightwords' && (
-        <div className="bg-white/90 rounded-3xl p-6 border-4 border-amber-200 shadow-md">
+        <div className="bg-white rounded-3xl p-6 border-2 border-sky-200 shadow-xs">
           <div className="flex items-center gap-2 mb-4">
             <SmartIcon name="📖" size={32} />
             <div>
-              <h3 className="text-xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+              <h3 className="text-xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                 Toddler Sight Words & Happy Expressions
               </h3>
-              <p className="text-xs text-amber-800">Tap words to hear them spoken clearly with heartwarming examples.</p>
+              <p className="text-xs text-sky-800">Tap words to hear them spoken clearly with heartwarming examples.</p>
             </div>
           </div>
 
@@ -356,14 +359,14 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
               <button
                 key={w.word}
                 onClick={() => handleSightWordClick(w)}
-                className="flex flex-col items-center justify-center p-5 bg-gradient-to-br from-amber-50 to-orange-50/60 rounded-2xl border-2 border-amber-300 hover:border-orange-400 hover:shadow-lg transition-all active:scale-95 text-center group"
+                className="flex flex-col items-center justify-center p-5 bg-sky-50/40 hover:bg-sky-50 rounded-2xl border-2 border-sky-100 hover:border-sky-300 hover:shadow-md transition-all active:scale-95 text-center group"
               >
                 <div className="mb-2 group-hover:scale-125 transition-transform">
                   <SmartIcon name={w.emoji} size={36} />
                 </div>
-                <span className="text-2xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">{w.word}</span>
-                <span className="text-xs text-amber-700 font-medium mt-1">{w.hint}</span>
-                <div className="mt-2 text-[10px] font-bold text-orange-600 flex items-center gap-1">
+                <span className="text-2xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">{w.word}</span>
+                <span className="text-xs text-slate-600 font-medium mt-1">{w.hint}</span>
+                <div className="mt-2 text-[10px] font-bold text-sky-600 flex items-center gap-1">
                   <Volume2 className="w-3 h-3" />
                   <span>Tap to Listen</span>
                 </div>
@@ -375,14 +378,14 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
 
       {/* Mode 4: Colors */}
       {activeSubTab === 'colors' && (
-        <div className="bg-white/90 rounded-3xl p-6 border-4 border-amber-200 shadow-md">
+        <div className="bg-white rounded-3xl p-6 border-2 border-sky-200 shadow-xs">
           <div className="flex items-center gap-2 mb-4">
             <SmartIcon name="🎨" size={32} />
             <div>
-              <h3 className="text-xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+              <h3 className="text-xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                 Basic Colors for Children
               </h3>
-              <p className="text-xs text-amber-800">Learn basic colors with everyday examples like Red, Blue, Green, Yellow, and more!</p>
+              <p className="text-xs text-sky-800">Learn basic colors with everyday examples like Red, Blue, Green, Yellow, and more!</p>
             </div>
           </div>
 
@@ -391,7 +394,7 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
               <button
                 key={c.name}
                 onClick={() => handleColorClick(c)}
-                className="flex flex-col items-center p-4 bg-amber-50/50 rounded-2xl border-2 border-amber-200 hover:border-amber-400 hover:shadow-lg transition-all text-center group active:scale-95"
+                className="flex flex-col items-center p-4 bg-slate-50 hover:bg-sky-50/50 rounded-2xl border-2 border-slate-200 hover:border-sky-300 hover:shadow-md transition-all text-center group active:scale-95"
               >
                 <div
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-md border-4 border-white mb-3 flex items-center justify-center transition-transform group-hover:scale-110 ring-2 ring-slate-200/50"
@@ -400,8 +403,8 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
                   <SmartIcon name={c.emoji} size={32} />
                 </div>
                 <h4 className="text-base font-extrabold text-slate-800">{c.name}</h4>
-                <p className="text-xs text-amber-800 font-medium mt-0.5">{c.theme}</p>
-                <span className="text-[10px] font-bold text-orange-600 mt-1 flex items-center gap-1 opacity-80 group-hover:opacity-100">
+                <p className="text-xs text-slate-500 font-medium mt-0.5">{c.theme}</p>
+                <span className="text-[10px] font-bold text-sky-600 mt-1 flex items-center gap-1 opacity-80 group-hover:opacity-100">
                   <Volume2 className="w-3 h-3" />
                   <span>Tap to Hear</span>
                 </span>
@@ -413,27 +416,27 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
 
       {/* Mode 5: Fun Quiz */}
       {activeSubTab === 'quiz' && (
-        <div className="max-w-xl mx-auto bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 rounded-3xl p-6 border-4 border-amber-300 shadow-xl text-center">
+        <div className="max-w-xl mx-auto bg-gradient-to-br from-sky-50 via-white to-blue-50 rounded-3xl p-6 border-2 border-sky-200 shadow-lg text-center">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-black bg-amber-200 text-amber-900 px-3 py-1 rounded-full">
+            <span className="text-xs font-black bg-sky-100 text-sky-900 px-3 py-1 rounded-full">
               Question {quizIndex + 1} of {quizItems.length}
             </span>
-            <div className="flex items-center gap-1 text-sm font-black text-orange-600">
+            <div className="flex items-center gap-1 text-sm font-black text-sky-600">
               <Trophy className="w-4 h-4 text-amber-500" />
               <span>Score: {quizScore} ⭐</span>
             </div>
           </div>
 
           <div className="my-5">
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-amber-950 mb-2">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
               {quizItems[quizIndex % quizItems.length].prompt}
             </h3>
-            <p className="text-xs text-amber-700">Tap the correct letter below to win a gold star!</p>
+            <p className="text-xs text-slate-600">Tap the correct letter below to win a gold star!</p>
           </div>
 
           {/* Feedback banner */}
           {quizFeedback && (
-            <div className="my-3 py-2 px-4 bg-amber-200 text-amber-950 font-black rounded-xl text-sm animate-bounce shadow-inner">
+            <div className="my-3 py-2 px-4 bg-sky-100 text-sky-950 font-black rounded-xl text-sm animate-bounce shadow-inner">
               {quizFeedback}
             </div>
           )}
@@ -444,15 +447,15 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
               <button
                 key={opt.letter}
                 onClick={() => handleQuizAnswer(opt)}
-                className="flex flex-col items-center justify-center p-5 bg-white rounded-2xl border-4 border-amber-200 hover:border-orange-400 hover:scale-105 active:scale-95 transition-all shadow-md group"
+                className="flex flex-col items-center justify-center p-5 bg-white rounded-2xl border-2 border-slate-200 hover:border-sky-400 hover:scale-105 active:scale-95 transition-all shadow-sm group"
               >
-                <span className="text-4xl sm:text-5xl font-extrabold font-['Fredoka',sans-serif] text-orange-600 mb-1 group-hover:scale-110 transition-transform">
+                <span className="text-4xl sm:text-5xl font-extrabold font-['Fredoka',sans-serif] text-sky-600 mb-1 group-hover:scale-110 transition-transform">
                   {opt.letter}
                 </span>
                 <div className="my-1">
                   <SmartIcon name={opt.iconName} size={28} />
                 </div>
-                <span className="text-xs font-bold text-amber-900 mt-1">{opt.word}</span>
+                <span className="text-xs font-bold text-slate-800 mt-1">{opt.word}</span>
               </button>
             ))}
           </div>
@@ -462,7 +465,7 @@ export const EnglishModule: React.FC<EnglishModuleProps> = ({ ageGroup, onAwardS
               sound.playPop();
               setQuizIndex((prev) => (prev + 1) % quizItems.length);
             }}
-            className="flex items-center gap-2 mx-auto text-xs font-bold text-amber-800 hover:text-orange-600 py-1 px-3 bg-amber-200/60 rounded-xl"
+            className="flex items-center gap-2 mx-auto text-xs font-bold text-sky-800 hover:text-sky-600 py-1 px-3 bg-sky-100/70 rounded-xl"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Next Question</span>
