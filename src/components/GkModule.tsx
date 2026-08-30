@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgeGroup, FestivalItem, SacredAnimal } from '../types';
 import { FESTIVALS_DATA, SACRED_ANIMALS } from '../data/gkData';
 import { sound } from '../utils/sound';
@@ -43,6 +43,12 @@ export const GkModule: React.FC<GkModuleProps> = ({ ageGroup, onAwardStar }) => 
   const [selectedFestival, setSelectedFestival] = useState<FestivalItem>(FESTIVALS_DATA[0]);
   const [selectedAnimal, setSelectedAnimal] = useState<SacredAnimal>(SACRED_ANIMALS[0]);
 
+  useEffect(() => {
+    return () => {
+      sound.stopSpeaking();
+    };
+  }, []);
+
   const subTabs = [
     { id: 'body-parts' as const, label: 'Body Parts', hindi: 'शरीर के अंग', emoji: '🧠', color: 'from-rose-500 to-pink-600' },
     { id: 'week-days' as const, label: 'Week Days', hindi: 'सप्ताह के दिन', emoji: '📅', color: 'from-amber-500 to-orange-500' },
@@ -72,7 +78,7 @@ export const GkModule: React.FC<GkModuleProps> = ({ ageGroup, onAwardStar }) => 
   return (
     <div className="space-y-6">
       {/* Sub-header Navigation with High-Contrast Category Tabs */}
-      <div className="bg-white/90 backdrop-blur-sm p-3.5 rounded-3xl border-2 border-amber-200 shadow-sm space-y-3">
+      <div className="bg-white/90 backdrop-blur-sm p-3.5 rounded-3xl border-2 border-teal-200 shadow-xs space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2 px-1">
           <div className="flex items-center gap-2.5">
             <span className="text-3xl">🌍</span>
@@ -88,7 +94,7 @@ export const GkModule: React.FC<GkModuleProps> = ({ ageGroup, onAwardStar }) => 
         </div>
 
         {/* 6 Core Subsections + Culture Pill Selector */}
-        <div className="flex flex-wrap gap-1.5 p-1 bg-amber-100/60 rounded-2xl">
+        <div className="flex flex-wrap gap-1.5 p-1 bg-teal-50 rounded-2xl border border-teal-100">
           {subTabs.map((tab) => {
             const isActive = activeSubTab === tab.id;
             return (
@@ -98,17 +104,21 @@ export const GkModule: React.FC<GkModuleProps> = ({ ageGroup, onAwardStar }) => 
                 onClick={() => {
                   sound.playPop();
                   setActiveSubTab(tab.id);
+                  if (tab.id === 'festivals') {
+                    setSelectedFestival(FESTIVALS_DATA[0]);
+                    setSelectedAnimal(SACRED_ANIMALS[0]);
+                  }
                 }}
-                className={`px-3 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-sm ${
+                className={`px-3 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs ${
                   isActive
-                    ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md scale-102 ring-2 ring-sky-300'
-                    : 'bg-white/90 text-slate-700 hover:bg-white hover:text-slate-900 border border-amber-200/80'
+                    ? 'bg-teal-600 text-white shadow-md scale-102 ring-2 ring-teal-200'
+                    : 'bg-white text-slate-700 hover:bg-teal-50 hover:text-slate-900 border border-slate-200'
                 }`}
               >
                 <span className="text-sm">{tab.emoji}</span>
                 <div className="text-left leading-tight">
                   <div className="font-extrabold">{tab.label}</div>
-                  <div className={`text-[10px] ${isActive ? 'text-sky-100' : 'text-slate-500'}`}>{tab.hindi}</div>
+                  <div className={`text-[10px] ${isActive ? 'text-teal-100' : 'text-slate-500'}`}>{tab.hindi}</div>
                 </div>
               </button>
             );

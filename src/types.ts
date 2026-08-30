@@ -1,6 +1,96 @@
 export type AgeGroup = '2-3' | '3-4' | '4-6';
 
-export type SubjectTab = 'english' | 'math' | 'hindi' | 'gk' | 'games' | 'shlokas' | 'stories';
+export type SubjectTab = 'home' | 'english' | 'math' | 'hindi' | 'gk' | 'rhymes' | 'sanatan' | 'games' | 'shlokas';
+
+export type SanatanCategory = 'gods' | 'shlokas' | 'yugas' | 'vedas' | 'festivals' | 'values';
+
+export interface SanatanTopicItem {
+  id: string;
+  category: SanatanCategory;
+  title: string;
+  hindiTitle: string;
+  sanskritTitle?: string;
+  subtitle: string;
+  imageUrl: string;
+  introduction: string[]; // 2-3 line child-friendly introduction
+  hindiIntroduction?: string[];
+  
+  // Specific to Gods & Goddesses
+  vahana?: string;
+  vahanaHindi?: string;
+  symbols?: string[];
+  favoritePrasad?: string;
+  favoritePrasadHindi?: string;
+  blessing?: string;
+  blessingHindi?: string;
+
+  // Specific to Basic Shlokas (ONLY in shlokas category)
+  shloka?: {
+    title: string;
+    sanskrit: string[];
+    transliteration: string[];
+    audioText: string;
+    englishMeaning: string;
+    hindiMeaning: string;
+    whenToChant?: string;
+    whenToChantHindi?: string;
+  };
+
+  // Specific to Yugas
+  eraName?: string;
+  dharmaPillars?: string;
+  keyAvatars?: string[];
+  moralLesson?: string;
+  moralLessonHindi?: string;
+
+  // Specific to Vedas & Puranas
+  vedaTheme?: string;
+  vedaThemeHindi?: string;
+  keyWisdom?: string[];
+  keyWisdomHindi?: string[];
+
+  // Specific to Festivals
+  festiveMonth?: string;
+  festiveMonthHindi?: string;
+  howKidsCelebrate?: string[];
+  howKidsCelebrateHindi?: string[];
+  festiveTreats?: string;
+  festiveTreatsHindi?: string;
+
+  // Specific to Values & Culture
+  practicalHabit?: string;
+  practicalHabitHindi?: string;
+  goldenRule?: string;
+  goldenRuleHindi?: string;
+
+  artTheme: {
+    primaryColor: string;
+    bgGradient: string;
+    badgeEmoji: string;
+    avatarSymbol: string;
+    illustrationType: string;
+  };
+  keySymbol: string;
+  sacredAttribute: string;
+  funFactForKids: string;
+  funFactForKidsHindi?: string;
+}
+
+export interface RhymeCardItem {
+  id: string;
+  title: string;
+  hindiTitle?: string;
+  language: 'hindi' | 'english';
+  tagline: string;
+  lyrics: string[];
+  phoneticLyrics?: string[];
+  translation?: string[];
+  iconEmoji: string;
+  illustrationType: string;
+  color: string;
+  bgGradient: string;
+  themeCharacters: string[];
+}
 
 export interface EnglishLetter {
   letter: string;

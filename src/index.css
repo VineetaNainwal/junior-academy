@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+@layer base {
+  html, body {
+    font-family: 'Nunito', 'Baloo 2', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Baloo 2', 'Nunito', system-ui, sans-serif;
+  }
+}
+
+/* Custom child-friendly scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFBEB;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FCD34D;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F59E0B;
+}
+

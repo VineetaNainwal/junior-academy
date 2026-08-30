@@ -4,6 +4,75 @@
  * and sweet, natural girl-voice speech synthesis in English and Hindi.
  */
 
+/**
+ * Automatically transliterates Devanagari text into friendly Romanized phonetics
+ * so that English TTS speech synthesizers can pronounce Hindi words, nursery rhymes,
+ * and shlokas with clear, melodious child-friendly pronunciation even without a native Hindi voice pack installed.
+ */
+export function devanagariToPhonetics(input: string): string {
+  if (!input) return '';
+  // If no Devanagari characters, return as is
+  if (!/[\u0900-\u097F]/.test(input)) return input;
+
+  const vowels: Record<string, string> = {
+    'अ': 'a', 'आ': 'aa', 'इ': 'i', 'ई': 'ee', 'उ': 'u', 'ऊ': 'oo', 'ऋ': 'ri',
+    'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'अं': 'an', 'अः': 'ah', 'ॐ': 'Om'
+  };
+
+  const matras: Record<string, string> = {
+    'ा': 'aa', 'ि': 'i', 'ी': 'ee', 'ु': 'u', 'ू': 'oo', 'ृ': 'ri',
+    'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au', 'ं': 'n', 'ँ': 'n', 'ः': 'h'
+  };
+
+  const consonants: Record<string, string> = {
+    'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+    'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+    'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+    'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+    'प': 'p', 'फ': 'ph', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+    'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+    'श': 'sh', 'ष': 'sh', 'स': 's', 'ह': 'h',
+    'क्ष': 'ksh', 'त्र': 'tr', 'ज्ञ': 'gya', 'श्र': 'shr',
+    'क़': 'q', 'ख़': 'kh', 'ग़': 'gh', 'ज़': 'z', 'ड़': 'r', 'ढ़': 'rh', 'फ़': 'f'
+  };
+
+  let out = '';
+  const len = input.length;
+  for (let i = 0; i < len; i++) {
+    const char = input[i];
+    const nextChar = i + 1 < len ? input[i + 1] : '';
+
+    if (vowels[char]) {
+      out += vowels[char];
+    } else if (consonants[char]) {
+      const c = consonants[char];
+      if (nextChar === '्') {
+        out += c;
+        i++; // skip halant
+      } else if (matras[nextChar]) {
+        out += c + matras[nextChar];
+        i++; // skip matra
+      } else if (/[\u0915-\u0939\u0958-\u095F]/.test(nextChar)) {
+        out += c + 'a';
+      } else if (nextChar === ' ' || nextChar === '' || /[\s.,!?;:।\-]/.test(nextChar)) {
+        out += c;
+      } else {
+        out += c + 'a';
+      }
+    } else if (matras[char]) {
+      out += matras[char];
+    } else if (char === '।') {
+      out += '. ';
+    } else if (char === '॥') {
+      out += '. ';
+    } else {
+      out += char;
+    }
+  }
+
+  return out.replace(/\s+/g, ' ').trim();
+}
+
 class SoundManager {
   private ctx: AudioContext | null = null;
   private soundEnabled: boolean = true;
@@ -371,7 +440,7 @@ class SoundManager {
       let targetLang = lang === 'hi' ? 'hi-IN' : 'en-US';
       let chosenVoice: SpeechSynthesisVoice | null = null;
 
-      if (lang === 'hi') {
+      if (lang === 'hi' || /[\u0900-\u097F]/.test(text)) {
         if (hasHindi) {
           chosenVoice = this.getBestGirlVoice('hi');
           targetLang = chosenVoice?.lang || 'hi-IN';
@@ -379,7 +448,7 @@ class SoundManager {
         } else {
           // Client host has no Hindi speech pack. English engines produce complete silence on Devanagari.
           // Fall back to crystal-clear phonetic pronunciation using English voice!
-          textToSpeak = phoneticFallback || text;
+          textToSpeak = phoneticFallback || devanagariToPhonetics(text);
           targetLang = 'en-IN';
           chosenVoice = this.getBestGirlVoice('en');
         }

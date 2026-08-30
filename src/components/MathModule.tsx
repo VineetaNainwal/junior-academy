@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgeGroup, MathNumber, ShapeItem, AdditionChallenge } from '../types';
 import { MATH_NUMBERS, MATH_SHAPES, generateRandomAdditionChallenges } from '../data/mathData';
 import { sound } from '../utils/sound';
@@ -42,9 +42,14 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
   const [solvedChallenges, setSolvedChallenges] = useState<number[]>([]);
   const [isAdditionCompleted, setIsAdditionCompleted] = useState(false);
 
-  // Filter numbers for younger ages
-  const maxNumbers = ageGroup === '2-3' ? 10 : ageGroup === '3-4' ? 15 : 20;
-  const numbersList = MATH_NUMBERS.slice(0, maxNumbers);
+  useEffect(() => {
+    return () => {
+      sound.stopSpeaking();
+    };
+  }, []);
+
+  // Full numbers list 1–20 for all ages
+  const numbersList = MATH_NUMBERS;
 
   const getNumberSpelling = (word: string) => {
     const letters = word.toUpperCase().split('').join(', ');
@@ -142,19 +147,19 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
   return (
     <div className="space-y-6">
       {/* Sub-header Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/80 backdrop-blur-sm p-3 rounded-2xl border-2 border-amber-200 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-2xl border-2 border-emerald-200 shadow-xs">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🔢</span>
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-amber-950 font-['Baloo_2',sans-serif]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
               Math & Numbers Playground
             </h2>
-            <p className="text-xs text-amber-800">Learn counting 1–20, number spelling, shapes & fun addition!</p>
+            <p className="text-xs text-emerald-800">Learn counting 1–20, number spelling, shapes & fun addition!</p>
           </div>
         </div>
 
         {/* Sub-tabs */}
-        <div className="flex flex-wrap gap-1.5 bg-amber-100/70 p-1 rounded-xl">
+        <div className="flex flex-wrap gap-1.5 bg-emerald-100/70 p-1 rounded-xl">
           <button
             id="math-tab-counting"
             onClick={() => {
@@ -164,7 +169,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'counting'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-emerald-900 hover:bg-emerald-200/60'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -180,7 +185,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'feedGanesha'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-emerald-900 hover:bg-emerald-200/60'
             }`}
           >
             <span className="text-sm">🟡</span>
@@ -196,7 +201,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'shapes'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-emerald-900 hover:bg-emerald-200/60'
             }`}
           >
             <Shapes className="w-3.5 h-3.5" />
@@ -212,7 +217,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
             className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
               activeSubTab === 'addition'
                 ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-amber-900 hover:bg-amber-200/60'
+                : 'text-emerald-900 hover:bg-emerald-200/60'
             }`}
           >
             <PlusCircle className="w-3.5 h-3.5" />
@@ -226,14 +231,14 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Big Number View */}
           <div className="lg:col-span-5 flex flex-col">
-            <div className="bg-gradient-to-br from-emerald-50 via-amber-50 to-teal-50 rounded-3xl p-6 border-4 border-emerald-300 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-teal-50 rounded-3xl p-6 border-2 border-emerald-200 shadow-md flex flex-col items-center text-center relative overflow-hidden">
               {/* Number Card */}
               <button
                 onClick={() => {
                   sound.playBell();
                   sound.speak(getNumberSpelling(selectedNum.word));
                 }}
-                className="w-36 h-36 rounded-3xl bg-gradient-to-br from-emerald-400 to-teal-600 p-1 shadow-lg mb-3 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all group"
+                className="w-36 h-36 rounded-3xl bg-gradient-to-br from-emerald-400 to-teal-500 p-1 shadow-md mb-3 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all group"
                 title={`Click to hear spelling of ${selectedNum.word}`}
               >
                 <div className="w-full h-full bg-white rounded-[22px] flex flex-col items-center justify-center group-hover:bg-emerald-50/40">
@@ -255,13 +260,13 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
                 <h3 className="text-4xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                   {selectedNum.word}
                 </h3>
-                <span className="mt-1 inline-block bg-emerald-100/90 text-emerald-900 font-mono font-black text-sm tracking-widest px-3.5 py-1 rounded-full border border-emerald-200 shadow-sm">
+                <span className="mt-1 inline-block bg-emerald-100/90 text-emerald-900 font-mono font-black text-sm tracking-widest px-3.5 py-1 rounded-full border border-emerald-200 shadow-xs">
                   {getSpellingDisplay(selectedNum.word)}
                 </span>
               </button>
 
               {/* Counting Items Visualizer */}
-              <div className="bg-white/95 rounded-2xl p-4 border border-emerald-200 w-full mb-4 shadow-sm">
+              <div className="bg-white rounded-2xl p-4 border border-emerald-200 w-full mb-4 shadow-xs">
                 <p className="text-xs font-bold text-slate-600 mb-2">
                   Tap to count items ({selectedNum.countItem}):
                 </p>
@@ -273,7 +278,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
                         sound.playPop();
                         sound.speak(`${i + 1}`);
                       }}
-                      className="w-10 h-10 rounded-xl bg-amber-100/80 hover:bg-amber-200 border border-amber-300 flex items-center justify-center shadow-sm hover:scale-125 transition-transform"
+                      className="w-10 h-10 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 flex items-center justify-center shadow-xs hover:scale-125 transition-transform"
                       title={`Item ${i + 1}`}
                     >
                       <SmartIcon name={selectedNum.countItemEmoji} size={24} />
@@ -289,7 +294,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
                   sound.playBell();
                   sound.speak(getNumberSpelling(selectedNum.word));
                 }}
-                className="w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <Volume2 className="w-5 h-5" />
                 <span>Listen Spelling ({getSpellingDisplay(selectedNum.word)})</span>
@@ -299,13 +304,13 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
 
           {/* Numbers Grid */}
           <div className="lg:col-span-7">
-            <div className="bg-white/90 backdrop-blur-md rounded-3xl p-5 border-4 border-emerald-200 shadow-md">
+            <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-base font-extrabold text-slate-800 flex items-center gap-2">
                   <span>Tap Any Number to Hear Spelling:</span>
                 </h4>
                 <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg">
-                  1 to {maxNumbers}
+                  1 to {numbersList.length} (All Numbers)
                 </span>
               </div>
 
@@ -319,8 +324,8 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
                       onClick={() => handleNumberClick(item)}
                       className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all group ${
                         isSelected
-                          ? 'bg-gradient-to-b from-emerald-500 to-teal-600 text-white border-white shadow-lg scale-105 ring-2 ring-emerald-300'
-                          : 'bg-emerald-50/60 hover:bg-emerald-100 text-slate-800 border-emerald-200 hover:scale-105 shadow-sm'
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-md scale-105 ring-2 ring-emerald-200'
+                          : 'bg-white hover:bg-emerald-50 text-slate-800 border-slate-200 hover:border-emerald-300 hover:scale-105 shadow-xs'
                       }`}
                     >
                       <span className="text-3xl font-extrabold font-['Fredoka',sans-serif] leading-none mb-1">
@@ -346,14 +351,14 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
 
       {/* Mode 2: Feed Bal Ganesha Game */}
       {activeSubTab === 'feedGanesha' && (
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-100 rounded-3xl p-6 sm:p-8 border-4 border-amber-300 shadow-xl text-center">
+        <div className="max-w-2xl mx-auto bg-gradient-to-br from-amber-50 via-white to-yellow-50 rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-lg text-center">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-extrabold bg-amber-200 text-amber-900 px-3 py-1.5 rounded-full">
+            <span className="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1.5 rounded-full">
               Mission: Feed Bal Ganesha {targetCount} Modaks!
             </span>
             <button
               onClick={() => handleResetGaneshaGame()}
-              className="flex items-center gap-1 text-xs font-bold text-amber-900 hover:text-orange-600 py-1 px-3 bg-amber-200/70 rounded-xl"
+              className="flex items-center gap-1 text-xs font-bold text-amber-900 hover:text-amber-950 py-1 px-3 bg-amber-100 rounded-xl"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>New Count</span>
@@ -362,20 +367,20 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
 
           {/* Ganesha Avatar & Reaction */}
           <div className="relative my-4 flex flex-col items-center">
-            <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 p-1.5 shadow-2xl flex items-center justify-center animate-pulse">
+            <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-yellow-500 p-1.5 shadow-xl flex items-center justify-center animate-pulse">
               <div className="w-full h-full bg-amber-50 rounded-full flex flex-col items-center justify-center shadow-inner">
                 <SmartIcon name="🐘" size={72} />
                 {ganeshaMood === 'excited' && (
                   <span className="text-xs font-black text-amber-600 animate-bounce">✨ Happy! ✨</span>
                 )}
                 {ganeshaMood === 'eating' && (
-                  <span className="text-xs font-black text-orange-600 animate-bounce">😋 Yum! 😋</span>
+                  <span className="text-xs font-black text-amber-600 animate-bounce">😋 Yum! 😋</span>
                 )}
               </div>
             </div>
 
             {/* Speech Bubble */}
-            <div className="mt-3 bg-white px-5 py-2 rounded-2xl border-2 border-amber-300 shadow-md font-bold text-sm text-amber-900">
+            <div className="mt-3 bg-white px-5 py-2 rounded-2xl border-2 border-amber-200 shadow-xs font-bold text-sm text-slate-800">
               {fedCount === targetCount
                 ? `🎉 "Jai Ganesha! Thank you for ${targetCount} sweet modaks!"`
                 : `"Please give me ${targetCount - fedCount} more round modak${targetCount - fedCount > 1 ? 's' : ''}!"`}
@@ -383,17 +388,17 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
           </div>
 
           {/* Golden Plate showing fed modaks */}
-          <div className="bg-gradient-to-b from-amber-100 to-amber-200 rounded-3xl p-4 border-4 border-amber-400 max-w-md mx-auto my-5 shadow-inner">
-            <div className="flex items-center justify-between text-xs font-bold text-amber-900 mb-2 px-2">
+          <div className="bg-amber-50 rounded-3xl p-4 border-2 border-amber-200 max-w-md mx-auto my-5 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-2 px-2">
               <span>Ganesha's Golden Plate:</span>
-              <span className="text-sm font-black text-orange-700">
+              <span className="text-sm font-black text-amber-700">
                 {fedCount} / {targetCount} Modaks
               </span>
             </div>
 
-            <div className="min-h-[70px] bg-amber-50 rounded-2xl p-3 border-2 border-dashed border-amber-300 flex flex-wrap items-center justify-center gap-3">
+            <div className="min-h-[70px] bg-white rounded-2xl p-3 border-2 border-dashed border-amber-200 flex flex-wrap items-center justify-center gap-3">
               {fedCount === 0 ? (
-                <span className="text-xs text-amber-600 font-medium italic">
+                <span className="text-xs text-slate-500 font-medium italic">
                   Tap the golden modak below to add to the plate!
                 </span>
               ) : (
@@ -412,7 +417,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
               <button
                 id="add-modak-btn"
                 onClick={handleAddModak}
-                className="py-4 px-8 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 text-white text-lg font-black rounded-3xl shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 border-2 border-white"
+                className="py-4 px-8 bg-amber-500 hover:bg-amber-600 text-white text-lg font-black rounded-3xl shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
               >
                 <SmartIcon name="modak" size={32} />
                 <span>Tap to Feed 1 Sweet Modak!</span>
@@ -420,7 +425,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
             ) : (
               <button
                 onClick={() => handleResetGaneshaGame()}
-                className="py-4 px-8 bg-emerald-500 hover:bg-emerald-600 text-white text-lg font-black rounded-3xl shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                className="py-4 px-8 bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-black rounded-3xl shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
               >
                 <CheckCircle2 className="w-6 h-6" />
                 <span>Play Next Number!</span>
@@ -432,11 +437,11 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
 
       {/* Mode 3: Shapes Explorer */}
       {activeSubTab === 'shapes' && (
-        <div className="bg-white/90 rounded-3xl p-6 border-4 border-emerald-200 shadow-md">
+        <div className="bg-white rounded-3xl p-6 border-2 border-emerald-200 shadow-xs">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-3xl">📐</span>
             <div>
-              <h3 className="text-xl font-extrabold text-slate-800 font-['Baloo_2',sans-serif]">
+              <h3 className="text-xl font-extrabold text-slate-900 font-['Baloo_2',sans-serif]">
                 Playful & Geometric Shapes
               </h3>
               <p className="text-xs text-slate-600">Discover geometric shapes, sides, and real-world examples!</p>
@@ -448,21 +453,21 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
               <div
                 key={shape.id}
                 onClick={() => handleShapeClick(shape)}
-                className="bg-emerald-50/50 hover:bg-emerald-100/60 p-5 rounded-2xl border-2 border-emerald-200 hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer flex flex-col items-center text-center group"
+                className="bg-slate-50 hover:bg-emerald-50/60 p-5 rounded-2xl border-2 border-slate-200 hover:border-emerald-300 hover:shadow-md transition-all cursor-pointer flex flex-col items-center text-center group"
               >
                 {/* Shape Visual representation */}
-                <div className="w-24 h-24 rounded-2xl bg-white shadow-md border-2 border-emerald-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-24 h-24 rounded-2xl bg-white shadow-xs border-2 border-emerald-200 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                   {shape.svgType === 'circle' && (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 shadow-md ring-4 ring-amber-200/60" />
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 shadow-xs ring-4 ring-amber-200/60" />
                   )}
                   {shape.svgType === 'triangle' && (
-                    <div className="w-0 h-0 border-l-[28px] border-l-transparent border-r-[28px] border-r-transparent border-b-[50px] border-b-rose-500 filter drop-shadow" />
+                    <div className="w-0 h-0 border-l-[28px] border-l-transparent border-r-[28px] border-r-transparent border-b-[50px] border-b-rose-500 filter drop-shadow-xs" />
                   )}
                   {shape.svgType === 'square' && (
-                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl shadow-md ring-4 ring-emerald-200/60" />
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl shadow-xs ring-4 ring-emerald-200/60" />
                   )}
                   {shape.svgType === 'rectangle' && (
-                    <div className="w-16 h-11 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl shadow-md ring-4 ring-blue-200/60" />
+                    <div className="w-16 h-11 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl shadow-xs ring-4 ring-blue-200/60" />
                   )}
                   {shape.svgType === 'star' && (
                     <SmartIcon name="⭐" size={40} />
@@ -473,7 +478,7 @@ export const MathModule: React.FC<MathModuleProps> = ({ ageGroup, onAwardStar })
                 </div>
 
                 <h4 className="text-xl font-extrabold text-slate-800">{shape.name}</h4>
-                <p className="text-xs text-slate-600 font-medium bg-white/80 px-3 py-1 rounded-xl border border-emerald-100 mt-1">
+                <p className="text-xs text-slate-600 font-medium bg-white px-3 py-1 rounded-xl border border-emerald-100 mt-1">
                   Example: {shape.culturalExample}
                 </p>
 
