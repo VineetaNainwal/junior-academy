@@ -229,7 +229,15 @@ export const BodyPartsSection: React.FC<BodyPartsSectionProps> = ({ onAwardStar 
               key={tab.id}
               onClick={() => {
                 sound.playPop();
-                setFilterCategory(tab.id as any);
+                const newCategory = tab.id as 'all' | 'senses' | 'head' | 'upper' | 'lower';
+                setFilterCategory(newCategory);
+                const items = newCategory === 'all'
+                  ? BODY_PARTS_DATA
+                  : BODY_PARTS_DATA.filter((p) => p.category === newCategory);
+                if (items.length > 0) {
+                  setSelectedPart(items[0]);
+                  sound.speak(items[0].name);
+                }
               }}
               className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 filterCategory === tab.id
