@@ -31,7 +31,7 @@ const MEMORY_CARDS = [
 ];
 
 export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) => {
-  const [activeGame, setActiveGame] = useState<'balloon' | 'memory' | 'rangoli' | 'soundSafari'>('balloon');
+  const [activeGame, setActiveGame] = useState<'balloon' | 'memory' | 'rangoli'>('balloon');
 
   // Balloon Game State
   const [balloonScore, setBalloonScore] = useState(0);
@@ -43,11 +43,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
   const [cards, setCards] = useState<{ id: number; name: string; emoji: string; flipped: boolean; matched: boolean }[]>([]);
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
   const [memoryMatches, setMemoryMatches] = useState(0);
-
-  // Sound Safari State
-  const [safariIndex, setSafariIndex] = useState(0);
-  const [safariScore, setSafariScore] = useState(0);
-  const [safariFeedback, setSafariFeedback] = useState<string | null>(null);
 
   // Rangoli Pad Ref
   const rangoliCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -200,41 +195,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
     }
   };
 
-  // Sound Safari Clues
-  const safariQuestions = [
-    { soundType: 'bell', prompt: 'Which sacred item makes a sweet ringing chime?', correctEmoji: '🔔', correctName: 'Temple Bell (Ghanti)', options: [{ emoji: '🔔', name: 'Temple Bell' }, { emoji: '🐄', name: 'Cow' }, { emoji: '🦚', name: 'Peacock' }] },
-    { soundType: 'flute', prompt: 'Which musical instrument plays Krishna’s sweet melody?', correctEmoji: '🪈', correctName: 'Flute (Bansuri)', options: [{ emoji: '🪈', name: 'Flute (Bansuri)' }, { emoji: '🥁', name: 'Dholak' }, { emoji: '🐘', name: 'Elephant' }] },
-    { soundType: 'tabla', prompt: 'Which percussion instrument keeps the sacred rhythm?', correctEmoji: '🪘', correctName: 'Tabla / Damru', options: [{ emoji: '🪘', name: 'Tabla' }, { emoji: '🪷', name: 'Lotus' }, { emoji: '☀️', name: 'Sun' }] },
-  ];
-
-  const handlePlaySafariSound = (type: string) => {
-    if (type === 'bell') sound.playBell();
-    else if (type === 'flute') sound.playFlute();
-    else if (type === 'tabla') sound.playTabla();
-    else sound.playSparkle();
-  };
-
-  const handleSafariAnswer = (choice: { emoji: string; name: string }) => {
-    const currentQ = safariQuestions[safariIndex % safariQuestions.length];
-    if (choice.emoji === currentQ.correctEmoji) {
-      sound.playSparkle();
-      sound.speak(`Yes! ${currentQ.correctName}!`);
-      setSafariFeedback('🎉 Superb! Correct!');
-      setSafariScore((prev) => prev + 1);
-      onAwardStar();
-      confetti({ particleCount: 30, spread: 50 });
-      setTimeout(() => {
-        setSafariFeedback(null);
-        setSafariIndex((prev) => (prev + 1) % safariQuestions.length);
-      }, 1400);
-    } else {
-      sound.playPop();
-      sound.speak('Listen again and tap the right image!');
-      setSafariFeedback('🌸 Try again!');
-      setTimeout(() => setSafariFeedback(null), 1000);
-    }
-  };
-
   // Rangoli Pad Handlers
   const handleRangoliCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = rangoliCanvasRef.current;
@@ -329,22 +289,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           >
             <Palette className="w-3.5 h-3.5" />
             <span>Rangoli Art</span>
-          </button>
-
-          <button
-            id="game-tab-safari"
-            onClick={() => {
-              sound.playPop();
-              setActiveGame('soundSafari');
-            }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
-              activeGame === 'soundSafari'
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'text-slate-700 hover:bg-slate-200'
-            }`}
-          >
-            <Volume2 className="w-3.5 h-3.5" />
-            <span>Sound Safari</span>
           </button>
         </div>
       </div>
@@ -500,60 +444,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           <p className="text-xs text-slate-500 text-center mt-2.5">
             ✨ Tap anywhere on the canvas to place your selected stamp and create colorful patterns!
           </p>
-        </div>
-      )}
-
-      {/* Game 4: Sound Safari */}
-      {activeGame === 'soundSafari' && (
-        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm text-center">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-bold bg-indigo-50 text-indigo-900 px-3.5 py-1.5 rounded-full border border-indigo-100">
-              Sound Riddle {safariIndex + 1} of {safariQuestions.length}
-            </span>
-            <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-full">Score: {safariScore} ⭐</span>
-          </div>
-
-          {(() => {
-            const q = safariQuestions[safariIndex % safariQuestions.length];
-            return (
-              <div>
-                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-1.5 font-['Baloo_2',sans-serif]">{q.prompt}</h3>
-                <p className="text-xs text-slate-500 mb-5 font-medium">Tap the speaker to hear the sound, then guess the right answer!</p>
-
-                {/* Big Audio Trigger Button */}
-                <button
-                  id="play-safari-audio-btn"
-                  onClick={() => handlePlaySafariSound(q.soundType)}
-                  className="w-24 h-24 mx-auto rounded-3xl bg-indigo-600 text-white flex flex-col items-center justify-center text-3xl shadow-sm hover:bg-indigo-700 active:scale-95 transition-all mb-6 border-2 border-indigo-400"
-                >
-                  <Volume2 className="w-8 h-8" />
-                  <span className="text-[10px] font-black tracking-wider uppercase mt-1">Play Sound</span>
-                </button>
-
-                {safariFeedback && (
-                  <div className="my-3 py-2 px-4 bg-indigo-100 text-indigo-950 font-black rounded-xl text-sm animate-bounce">
-                    {safariFeedback}
-                  </div>
-                )}
-
-                {/* Options */}
-                <div className="grid grid-cols-3 gap-3 my-4">
-                  {q.options.map((opt) => (
-                    <button
-                      key={opt.name}
-                      onClick={() => handleSafariAnswer(opt)}
-                      className="p-4 bg-slate-50 hover:bg-indigo-50/50 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 hover:scale-105 active:scale-95 transition-all shadow-xs flex flex-col items-center"
-                    >
-                      <div className="mb-1">
-                        <SmartIcon name={opt.emoji} size={36} />
-                      </div>
-                      <span className="text-xs font-bold text-slate-800">{opt.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })()}
         </div>
       )}
     </div>

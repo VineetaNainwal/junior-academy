@@ -2,20 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Bal Vidya - Kids Learning (English, Math, Hindi & General Awareness)</title>
     <meta name="description" content="A colorful, interactive early learning platform for children aged 2–6 years teaching English, Math, Hindi, and General Awareness (Body Parts, Week Days, Months, Seasons, Planets, Continents) with phonics, games, rhymes, and stories." />
     <meta property="og:title" content="Bal Vidya - Kids Learning (English, Math, Hindi & General Awareness)" />
     <meta property="og:description" content="A colorful, interactive early learning platform for children aged 2–6 years teaching English, Math, Hindi, and General Awareness (Body Parts, Week Days, Months, Seasons, Planets, Continents) with phonics, games, rhymes, and stories." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- PWA & Mobile Settings -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#f59e0b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Bal Vidya" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[#FFFDF7] text-slate-800 font-['Nunito','Baloo_2',sans-serif] selection:bg-amber-200 antialiased">
+  <body class="bg-[#FFFDF7] text-slate-800 font-['Nunito','Baloo_2',sans-serif] selection:bg-amber-200 antialiased overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.log('SW registration failed: ', err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>
 
