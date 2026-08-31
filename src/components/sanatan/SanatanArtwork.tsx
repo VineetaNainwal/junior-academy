@@ -3,21 +3,19 @@ import { SanatanTopicItem } from '../../types';
 
 interface SanatanArtworkProps {
   item: SanatanTopicItem;
-  customImageUrl?: string;
   size?: 'card' | 'large' | 'medium' | 'small' | 'spotlight';
   showOverlayText?: boolean;
 }
 
 export const SanatanArtwork: React.FC<SanatanArtworkProps> = ({
   item,
-  customImageUrl,
   size = 'spotlight',
   showOverlayText = false,
 }) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const effectiveImageUrl = customImageUrl || item.imageUrl;
+  const effectiveImageUrl = item.imageUrl;
 
   useEffect(() => {
     setImageError(false);
