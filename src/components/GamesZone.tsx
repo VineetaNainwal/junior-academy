@@ -31,7 +31,7 @@ const MEMORY_CARDS = [
 ];
 
 export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) => {
-  const [activeGame, setActiveGame] = useState<'balloon' | 'memory' | 'rangoli' | 'soundSafari'>('balloon');
+  const [activeGame, setActiveGame] = useState<'balloon' | 'memory' | 'rangoli'>('balloon');
 
   // Balloon Game State
   const [balloonScore, setBalloonScore] = useState(0);
@@ -43,11 +43,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
   const [cards, setCards] = useState<{ id: number; name: string; emoji: string; flipped: boolean; matched: boolean }[]>([]);
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
   const [memoryMatches, setMemoryMatches] = useState(0);
-
-  // Sound Safari State
-  const [safariIndex, setSafariIndex] = useState(0);
-  const [safariScore, setSafariScore] = useState(0);
-  const [safariFeedback, setSafariFeedback] = useState<string | null>(null);
 
   // Rangoli Pad Ref
   const rangoliCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -197,41 +192,6 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           setFlippedIndices([]);
         }, 900);
       }
-    }
-  };
-
-  // Sound Safari Clues
-  const safariQuestions = [
-    { soundType: 'bell', prompt: 'Which sacred item makes a sweet ringing chime?', correctEmoji: '🔔', correctName: 'Temple Bell (Ghanti)', options: [{ emoji: '🔔', name: 'Temple Bell' }, { emoji: '🐄', name: 'Cow' }, { emoji: '🦚', name: 'Peacock' }] },
-    { soundType: 'flute', prompt: 'Which musical instrument plays Krishna’s sweet melody?', correctEmoji: '🪈', correctName: 'Flute (Bansuri)', options: [{ emoji: '🪈', name: 'Flute (Bansuri)' }, { emoji: '🥁', name: 'Dholak' }, { emoji: '🐘', name: 'Elephant' }] },
-    { soundType: 'tabla', prompt: 'Which percussion instrument keeps the sacred rhythm?', correctEmoji: '🪘', correctName: 'Tabla / Damru', options: [{ emoji: '🪘', name: 'Tabla' }, { emoji: '🪷', name: 'Lotus' }, { emoji: '☀️', name: 'Sun' }] },
-  ];
-
-  const handlePlaySafariSound = (type: string) => {
-    if (type === 'bell') sound.playBell();
-    else if (type === 'flute') sound.playFlute();
-    else if (type === 'tabla') sound.playTabla();
-    else sound.playSparkle();
-  };
-
-  const handleSafariAnswer = (choice: { emoji: string; name: string }) => {
-    const currentQ = safariQuestions[safariIndex % safariQuestions.length];
-    if (choice.emoji === currentQ.correctEmoji) {
-      sound.playSparkle();
-      sound.speak(`Yes! ${currentQ.correctName}!`);
-      setSafariFeedback('🎉 Superb! Correct!');
-      setSafariScore((prev) => prev + 1);
-      onAwardStar();
-      confetti({ particleCount: 30, spread: 50 });
-      setTimeout(() => {
-        setSafariFeedback(null);
-        setSafariIndex((prev) => (prev + 1) % safariQuestions.length);
-      }, 1400);
-    } else {
-      sound.playPop();
-      sound.speak('Listen again and tap the right image!');
-      setSafariFeedback('🌸 Try again!');
-      setTimeout(() => setSafariFeedback(null), 1000);
     }
   };
 

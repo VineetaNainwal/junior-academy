@@ -511,6 +511,208 @@ class SoundManager {
     this.speak(hindiText, 'hi', onEnd, phoneticFallback);
   }
 
+  // Sound Safari: Elephant Trumpet
+  public playElephant() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+      osc.frequency.exponentialRampToValueAtTime(250, now + 0.4);
+      osc.frequency.exponentialRampToValueAtTime(450, now + 0.6);
+
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.7);
+    } catch {}
+  }
+
+  // Sound Safari: Peacock Cry
+  public playPeacock() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.linearRampToValueAtTime(1400, now + 0.2);
+      osc.frequency.linearRampToValueAtTime(1100, now + 0.4);
+
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch {}
+  }
+
+  // Sound Safari: Cow Moo (Refined gentle warm moo)
+  public playCow() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.linearRampToValueAtTime(120, now + 0.3);
+      osc.frequency.linearRampToValueAtTime(95, now + 0.7);
+
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.8);
+    } catch {}
+  }
+
+  // Sound Safari: Tiger Roar
+  public playTiger() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(110, now);
+      osc.frequency.linearRampToValueAtTime(170, now + 0.25);
+      osc.frequency.linearRampToValueAtTime(80, now + 0.7);
+
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.8);
+    } catch {}
+  }
+
+  // Sound Safari: Monkey Chatter
+  public playMonkey() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      for (let i = 0; i < 4; i++) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        const startT = now + i * 0.12;
+        osc.frequency.setValueAtTime(500 + i * 60, startT);
+        osc.frequency.linearRampToValueAtTime(700 + i * 40, startT + 0.08);
+
+        gain.gain.setValueAtTime(0.2, startT);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.1);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(startT);
+        osc.stop(startT + 0.11);
+      }
+    } catch {}
+  }
+
+  // Sound Safari: Horse Neigh
+  public playHorse() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(600, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.4);
+
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch {}
+  }
+
+  // Sound Safari: Dog Bark
+  public playDog() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      for (let i = 0; i < 2; i++) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        const startT = now + i * 0.2;
+        osc.frequency.setValueAtTime(250, startT);
+        osc.frequency.linearRampToValueAtTime(180, startT + 0.12);
+
+        gain.gain.setValueAtTime(0.25, startT);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.15);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(startT);
+        osc.stop(startT + 0.16);
+      }
+    } catch {}
+  }
+
+  // Sound Safari: Lion Roar
+  public playLion() {
+    if (!this.soundEnabled) return;
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(90, now);
+      osc.frequency.linearRampToValueAtTime(140, now + 0.2);
+      osc.frequency.linearRampToValueAtTime(70, now + 0.6);
+
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.7);
+    } catch {}
+  }
+
   public stopSpeaking() {
     this.currentSpeechSessionId++; // Invalidate active speech and callbacks immediately
     if (this.activeSpeakTimeout) {
