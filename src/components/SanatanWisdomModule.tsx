@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AgeGroup, SanatanTopicItem, SanatanCategory } from '../types';
 import { SANATAN_SUBSECTIONS, SANATAN_WISDOM_DATA } from '../data/sanatanWisdomData';
 import { SanatanArtwork } from './sanatan/SanatanArtwork';
@@ -29,6 +29,9 @@ import {
   Utensils,
   Eye,
   Info,
+  Image as ImageIcon,
+  Upload,
+  Link,
   Check
 } from 'lucide-react';
 
@@ -60,6 +63,12 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
   // Full Explore Modal State
   const [exploreModalOpen, setExploreModalOpen] = useState(false);
 
+  // Custom User Uploaded / Linked Images store (persisted in session)
+  const [customImages, setCustomImages] = useState<Record<string, string>>({});
+  const [showImageUploadBox, setShowImageUploadBox] = useState(false);
+  const [imageUrlInput, setImageUrlInput] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Audio / Chanting state
   const [isChanting, setIsChanting] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
@@ -89,6 +98,7 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
     sound.playPop();
     handleStopAudio();
     setSelectedTopicId(topic.id);
+    setShowImageUploadBox(false);
     sound.speak(
       languageMode === 'hindi' ? topic.hindiTitle : topic.title,
       languageMode === 'hindi' ? 'hi' : 'en'
@@ -127,6 +137,28 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
     }
   };
 
+  // Handle local image file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setCustomImages((prev) => ({ ...prev, [activeTopic.id]: url }));
+      setShowImageUploadBox(false);
+      sound.playSparkle();
+    }
+  };
+
+  // Handle URL submit
+  const handleUrlSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (imageUrlInput.trim()) {
+      setCustomImages((prev) => ({ ...prev, [activeTopic.id]: imageUrlInput.trim() }));
+      setImageUrlInput('');
+      setShowImageUploadBox(false);
+      sound.playSparkle();
+    }
+  };
+
   const handleMarkLearned = (topicId: string) => {
     if (!learnedTopics[topicId]) {
       setLearnedTopics((prev) => ({ ...prev, [topicId]: true }));
@@ -142,6 +174,8 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
 
   const currentCategoryConfig =
     SANATAN_SUBSECTIONS.find((s) => s.id === activeCategory) || SANATAN_SUBSECTIONS[0];
+
+  const activeCustomImage = customImages[activeTopic.id];
 
   return (
     <div className="space-y-5">
@@ -238,9 +272,22 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
           <div className="w-full relative">
             <SanatanArtwork
               item={activeTopic}
+              customImageUrl={activeCustomImage}
               size="spotlight"
               showOverlayText={false}
             />
+
+            {/* Custom Image Upload Trigger Button */}
+            <div className="absolute top-3 right-3 z-30">
+              <button
+                onClick={() => setShowImageUploadBox(!showImageUploadBox)}
+                className="px-2.5 py-1 rounded-xl bg-white/95 hover:bg-white text-slate-800 text-xs font-black shadow-sm border border-slate-200 flex items-center gap-1.5 backdrop-blur-sm transition-transform active:scale-95"
+                title="Add or Change Custom Image"
+              >
+                <ImageIcon size={14} className="text-indigo-600" />
+                <span>{activeCustomImage ? 'Change Image' : '+ Add Image'}</span>
+              </button>
+            </div>
 
             {/* Learned Checkmark Badge */}
             {learnedTopics[activeTopic.id] && (
@@ -249,6 +296,54 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
               </div>
             )}
           </div>
+
+          {/* Add / Change Image Dropdown Box */}
+          {showImageUploadBox && (
+            <div className="w-full mt-3 p-3 bg-slate-50 rounded-2xl border border-slate-200 text-left space-y-2 text-xs animate-in fade-in duration-150">
+              <div className="flex items-center justify-between font-black text-slate-900">
+                <span>Upload Artwork or Set Image Path/URL</span>
+                <button
+                  onClick={() => setShowImageUploadBox(false)}
+                  className="text-slate-400 hover:text-slate-700"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1 py-1.5 px-2 bg-white hover:bg-slate-100 text-slate-800 font-bold rounded-xl border border-slate-200 flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <Upload size={13} />
+                  <span>Choose File</span>
+                </button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </div>
+
+              <form onSubmit={handleUrlSubmit} className="flex gap-1.5">
+                <input
+                  type="text"
+                  placeholder="/images/sanatan/gods/ganesha.jpg or https://..."
+                  value={imageUrlInput}
+                  onChange={(e) => setImageUrlInput(e.target.value)}
+                  className="flex-1 px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl"
+                >
+                  Set
+                </button>
+              </form>
+            </div>
+          )}
 
           {/* Title and Subtitles */}
           <div className="mt-4 space-y-1.5 w-full">
@@ -425,6 +520,7 @@ export const SanatanWisdomModule: React.FC<SanatanWisdomModuleProps> = ({
             <div className="relative">
               <SanatanArtwork
                 item={activeTopic}
+                customImageUrl={activeCustomImage}
                 size="large"
                 showOverlayText={false}
               />

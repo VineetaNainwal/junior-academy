@@ -290,6 +290,22 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
             <Palette className="w-3.5 h-3.5" />
             <span>Rangoli Art</span>
           </button>
+
+          <button
+            id="game-tab-safari"
+            onClick={() => {
+              sound.playPop();
+              setActiveGame('soundSafari');
+            }}
+            className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
+              activeGame === 'soundSafari'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            <Volume2 className="w-3.5 h-3.5" />
+            <span>Sound Safari</span>
+          </button>
         </div>
       </div>
 
@@ -444,6 +460,60 @@ export const GamesZone: React.FC<GamesZoneProps> = ({ ageGroup, onAwardStar }) =
           <p className="text-xs text-slate-500 text-center mt-2.5">
             ✨ Tap anywhere on the canvas to place your selected stamp and create colorful patterns!
           </p>
+        </div>
+      )}
+
+      {/* Game 4: Sound Safari */}
+      {activeGame === 'soundSafari' && (
+        <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 border-2 border-indigo-100 shadow-sm text-center">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-bold bg-indigo-50 text-indigo-900 px-3.5 py-1.5 rounded-full border border-indigo-100">
+              Sound Riddle {safariIndex + 1} of {safariQuestions.length}
+            </span>
+            <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-full">Score: {safariScore} ⭐</span>
+          </div>
+
+          {(() => {
+            const q = safariQuestions[safariIndex % safariQuestions.length];
+            return (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-1.5 font-['Baloo_2',sans-serif]">{q.prompt}</h3>
+                <p className="text-xs text-slate-500 mb-5 font-medium">Tap the speaker to hear the sound, then guess the right answer!</p>
+
+                {/* Big Audio Trigger Button */}
+                <button
+                  id="play-safari-audio-btn"
+                  onClick={() => handlePlaySafariSound(q.soundType)}
+                  className="w-24 h-24 mx-auto rounded-3xl bg-indigo-600 text-white flex flex-col items-center justify-center text-3xl shadow-sm hover:bg-indigo-700 active:scale-95 transition-all mb-6 border-2 border-indigo-400"
+                >
+                  <Volume2 className="w-8 h-8" />
+                  <span className="text-[10px] font-black tracking-wider uppercase mt-1">Play Sound</span>
+                </button>
+
+                {safariFeedback && (
+                  <div className="my-3 py-2 px-4 bg-indigo-100 text-indigo-950 font-black rounded-xl text-sm animate-bounce">
+                    {safariFeedback}
+                  </div>
+                )}
+
+                {/* Options */}
+                <div className="grid grid-cols-3 gap-3 my-4">
+                  {q.options.map((opt) => (
+                    <button
+                      key={opt.name}
+                      onClick={() => handleSafariAnswer(opt)}
+                      className="p-4 bg-slate-50 hover:bg-indigo-50/50 rounded-2xl border-2 border-slate-200 hover:border-indigo-400 hover:scale-105 active:scale-95 transition-all shadow-xs flex flex-col items-center"
+                    >
+                      <div className="mb-1">
+                        <SmartIcon name={opt.emoji} size={36} />
+                      </div>
+                      <span className="text-xs font-bold text-slate-800">{opt.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>

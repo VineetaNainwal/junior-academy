@@ -50,6 +50,12 @@ export const GkModule: React.FC<GkModuleProps> = ({ ageGroup, onAwardStar }) => 
     };
   }, []);
 
+  useEffect(() => {
+    return () => {
+      sound.stopSpeaking();
+    };
+  }, []);
+
   const subTabs = [
     { id: 'body-parts' as const, label: 'Body Parts', hindi: 'शरीर के अंग', emoji: '🧠', color: 'from-rose-500 to-pink-600' },
     { id: 'week-days' as const, label: 'Week Days', hindi: 'सप्ताह के दिन', emoji: '📅', color: 'from-amber-500 to-orange-500' },

@@ -149,13 +149,13 @@ export const HomePage: React.FC<HomePageProps> = ({
       id: 'games' as SubjectTab,
       title: 'Play & Game Zone',
       hindiTitle: 'बाल क्रीड़ा कुंज',
-      subtitle: 'Balloon Pop, Memory Cards & Rangoli Art',
+      subtitle: 'Balloon Pop, Memory Cards, Rangoli & Sound Safari',
       emoji: '🎮',
       tagColor: 'bg-cyan-100 text-cyan-900 border-cyan-200',
       bgGradient: 'from-cyan-500/10 via-cyan-500/5 to-transparent hover:border-cyan-400',
       accentColor: 'text-cyan-700',
       buttonBg: 'bg-cyan-600 hover:bg-cyan-700 text-white',
-      highlights: ['Alphabet Balloon Popper', 'Sacred Memory Match Cards', 'Rangoli Art Pad'],
+      highlights: ['Alphabet Balloon Popper', 'Sacred Memory Match Cards', 'Rangoli & Sound Riddles'],
     },
   ];
 
