@@ -1,9 +1,10 @@
+const APP_BASE = '/junior-academy/';
 const CACHE_NAME = 'bal-vidya-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx'
+  APP_BASE,
+  `${APP_BASE}index.html`,
+  `${APP_BASE}manifest.json`,
+  `${APP_BASE}favicon.ico`,
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,12 +32,23 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const requestUrl = new URL(event.request.url);
+
+  if (event.request.method !== 'GET' || requestUrl.origin !== self.location.origin) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request).catch(() => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request).catch(() => {
         if (event.request.mode === 'navigate') {
-          return caches.match('/');
+          return caches.match(`${APP_BASE}index.html`);
         }
+        return caches.match(event.request);
       });
     })
   );
